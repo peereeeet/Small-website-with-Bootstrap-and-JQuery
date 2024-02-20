@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<br>
+  <title>Web para buscar info de los repositorios de un usuario de Github</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+  $(document).ready(function(){
+	$("#btn1").click(function(){
+		$.get("https://github.com/" + $("#uname") + "/repos", function(name, description, followers){
+			$("#nombre").text(name);
+			$("#descripcion").text(description);
+			$("#seguidores").text(followers);
+		});
+	});
+  });
+  </script>
+</head>
+
+<body>
+<div class="container">
+  <h2>Buscar repositorios de un usuario Github</h2>
+    <div class="form-group">
+      <label for="uname">Usuario:</label>
+      <input type="text" class="form-control" id="uname" placeholder="Introduce usuario" name="uname" required>
+    </div>
+    <button id="btn1">Enviar</button>
+</div>
+
+<br>
+<br>
+
+<div class="container">
+  <h2>Info usuario</h2>
+  <p>A continuación, se muestra información sobre los repositorios del usuario que se ha introducido préviamente:</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre respositorio</th>
+        <th>Descripción</th>
+        <th>Número de seguidores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="nombre">---</td>
+        <td id="descripcion">---</td>
+        <td id="seguidores">---</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+
+</html>
+
+
+/*Consultar info de mi github: https://api.github.com/users/peereeeet
