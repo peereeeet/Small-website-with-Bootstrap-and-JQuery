@@ -1,65 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<br>
-  <title>Web para buscar info de los repositorios de un usuario de Github</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script>
-  $(document).ready(function(){
-	$("#btn1").click(function(){
-		$.get("https://github.com/" + $("#uname") + "/repos", function(name, description, followers){
-			$("#nombre").text(name);
-			$("#descripcion").text(description);
-			$("#seguidores").text(followers);
-		});
-	});
-  });
-  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
 <div class="container">
-  <h2>Buscar repositorios de un usuario Github</h2>
-    <div class="form-group">
-      <label for="uname">Usuario:</label>
-      <input type="text" class="form-control" id="uname" placeholder="Introduce usuario" name="uname" required>
-    </div>
+	<div class="jumbotron">
+	<h2>Buscar repositorios de un usuario Github</h2>
+    <p>Escribe el nombre de usuario para saber su información:</p>
+    <input type="text" class="form-control" id="uname" placeholder="Introduce usuario">
+	<br>
     <button id="btn1">Enviar</button>
-</div>
-
+	<div id="errorMensaje" class="text-danger mt-3"></div>
+	</div>
+	
 <br>
 <br>
 
-<div class="container">
-  <h2>Info usuario</h2>
-  <p>A continuación, se muestra información sobre los repositorios del usuario que se ha introducido préviamente:</p>            
-  <table class="table">
+<h2>Info usuario</h2>
+<p>A continuación, se muestra información sobre los repositorios del usuario que se ha introducido préviamente:</p>            
+<table class="table table-bordered">
     <thead>
       <tr>
-        <th>Nombre respositorio</th>
+        <th>Nombre usuario</th>
         <th>Descripción</th>
         <th>Número de seguidores</th>
+		<th>Número de repositorios</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td id="nombre">---</td>
-        <td id="descripcion">---</td>
-        <td id="seguidores">---</td>
-      </tr>
+    <tbody id="resultados">
+      <!--A continuacion los resultados-->
     </tbody>
   </table>
 </div>
 
 </body>
 
+<script>
+  $(document).ready(function(){
+	$("#btn1").click(function(){
+		var usuario = $('#uname').val();
+		var resultadosT = $('#resultados');
+		
+		if (!usuario) {
+      	$('#errorMensaje').text('Inserte nombre del usuario');
+      	resultadosT.empty();
+      	return;
+		} 
+		else
+		$('#errorMensaje').text('');
+		
+		$.ajax({
+        url: 'https://api.github.com/users/' + usuario,
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          resultadosT.empty();
+                        resultadosT.append(`
+                            <tr>
+                                <td>${data.name || 'No proporcionado'}</td>
+                                <td>${data.bio || 'No proporcionada'}</td>
+                                <td>${data.followers || 0}</td>
+                                <td>${data.public_repos}</td>
+                            </tr>
+                        `);
+                    },
+                    error: function (error){
+                        $('#errorMensaje').text('El usuario no se encontró en GitHub.');
+                        resultadosT.empty();
+        }
+      });
+	});
+  });
+ </script>
+
 </html>
-
-
-/*Consultar info de mi github: https://api.github.com/users/peereeeet
