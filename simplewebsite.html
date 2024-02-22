@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container-fluid">
 	<div class="jumbotron">
 	<h2>Buscar repositorios de un usuario Github</h2>
     <p>Escribe el nombre de usuario para saber su información:</p>
@@ -52,10 +52,7 @@
 		else
 		$('#errorMensaje').text('');
 		
-		$.ajax({
-        url: 'https://api.github.com/users/' + usuario,
-        method: 'GET',
-        dataType: 'json',
+		$.ajax({ url: 'https://api.github.com/users/' + usuario, method: 'GET', dataType: 'json',
         success: function(data) {
           resultadosT.empty();
                         resultadosT.append(`
